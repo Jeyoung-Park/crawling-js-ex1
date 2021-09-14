@@ -24,17 +24,14 @@ getHtml()
 
     // 인자로 콜백함수를 받아 태그들의 배열을 순회하면서 콜백함수를 실행
     $bodyList.each(function (i, element) {
-      console.log(
-        `${i}번쨰 element`,
-        $(this).find("a.link_post strong.tit-post")
-      );
       ulList[i] = {
         title: $(this).find("strong.tit_post").text(),
-        // url: $(this).find("strong.news-tl a").attr("href"),
-        // image_url: $(this).find("p.poto a img").attr("src"),
-        // image_at: $(this).find("p.poto a img").attr("alt"),
-        // summary: $(this).find("p.l1ead").text().slice(0, -11),
-        // date: $(this).find("span.p-time").text(),
+        url: $(this).find("a.link_post").attr("href"),
+        image_url: $(this).find("a.thumbnail_post img").attr('src'),
+        summary: $(this).find("p.txt_post").text(),
+        date: $(this).find("span.txt_date").text(),
+        category:$(this).find("a.link_cate").text(),
+
       };
     });
 
