@@ -42,7 +42,7 @@ const scrapSinglePageData = async (currentIndex) => {
     });
 };
 
-const scrapTotalData = async (pageNumber) => {
+const scrapTotalData = (pageNumber) => {
   let resultData = [];
   for (let i = 0; i < pageNumber; i++) {
     setTimeout(async () => {
