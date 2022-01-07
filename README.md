@@ -1,1 +1,9 @@
-# crawling-js-ex1
+# web-scraping-covid
+
+## Getting Started
+
+root 경로에서 
+
+```bash
+node index
+```
