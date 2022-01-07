@@ -1,6 +1,7 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 const xlsx = require("xlsx");
+const path = require("path");
 
 const getHtml = async (paramUrl) => {
   try {
@@ -62,7 +63,7 @@ const convertToXlsx = async (newsArray) => {
   const newsSheet = xlsx.utils.json_to_sheet(newsArray);
   const newsBook = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(newsBook, newsSheet, "News");
-  xlsx.writeFile(newsBook, "crawling_covid_news.xlsx");
+  xlsx.writeFile(newsBook, path.join(__dirname, "crawling_covid_news.xlsx"));
 };
 
 scrapTotalData(3);
