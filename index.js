@@ -44,26 +44,30 @@ const scrapSinglePageData = async (currentIndex) => {
     });
 };
 
+const scrapSinglePageDataAsync = (accData, startValue) => {
+  console.log("scrapSinglePageDataAsync, ", startValue);
+  return new Promise((resolve) =>
+    setTimeout(async () => {
+      const singlePageData = await scrapSinglePageData(startValue);
+      resolve([...accData, ...singlePageData]);
+    }, 3000)
+  );
+};
+
 const scrapTotalData = async (pageNumber) => {
   let resultData = [];
   for (let i = 0; i < pageNumber; i++) {
-    setTimeout(async () => {
-      const singlePageData = await scrapSinglePageData(1 + i * 10);
-      resultData = [...resultData, ...singlePageData];
-      if (resultData?.length === 30) {
-        convertToXlsx(resultData);
-      }
-    }, 3000);
+    resultData = await scrapSinglePageDataAsync(resultData, 1 + i * 10);
   }
   return resultData;
 };
 
-const convertToXlsx = async (newsArray) => {
-  console.log("newsArray, ", newsArray?.length);
+const convertToXlsx = async () => {
+  const newsArray = await scrapTotalData(3);
   const newsSheet = xlsx.utils.json_to_sheet(newsArray);
   const newsBook = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(newsBook, newsSheet, "News");
   xlsx.writeFile(newsBook, path.join(__dirname, "crawling_covid_news.xlsx"));
 };
 
-scrapTotalData(3);
+convertToXlsx();
