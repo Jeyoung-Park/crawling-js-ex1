@@ -1,5 +1,6 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
+const xlsx = require("xlsx");
 
 const getHtml = async (paramUrl) => {
   try {
@@ -42,16 +43,26 @@ const scrapSinglePageData = async (currentIndex) => {
     });
 };
 
-const scrapTotalData = (pageNumber) => {
+const scrapTotalData = async (pageNumber) => {
   let resultData = [];
   for (let i = 0; i < pageNumber; i++) {
     setTimeout(async () => {
       const singlePageData = await scrapSinglePageData(1 + i * 10);
-      resultData=[...resultData, ...singlePageData]
-      console.log('resultData,', resultData.length)
+      resultData = [...resultData, ...singlePageData];
+      if (resultData?.length === 30) {
+        convertToXlsx(resultData);
+      }
     }, 3000);
   }
   return resultData;
 };
 
-console.log(scrapTotalData(3).length);
+const convertToXlsx = async (newsArray) => {
+  console.log("newsArray, ", newsArray?.length);
+  const newsSheet = xlsx.utils.json_to_sheet(newsArray);
+  const newsBook = xlsx.utils.book_new();
+  xlsx.utils.book_append_sheet(newsBook, newsSheet, "News");
+  xlsx.writeFile(newsBook, "crawling_covid_news.xlsx");
+};
+
+scrapTotalData(3);
